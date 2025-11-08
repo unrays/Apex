@@ -37,7 +37,8 @@
 
 ---
 
-## Full Code
+**First iteration** – Conceptually elegant
+*Great design, but not optimized for speed.*
 
 ```csharp
 // Copyright (c) November 2025 Félix-Olivier Dumas. All rights reserved.
@@ -267,6 +268,168 @@ class Program {
         var randomEntity = new Entity(entityCount / 2);
         var nameRandom = entityManager.getComponent<Name>(randomEntity);
         Console.WriteLine($"Random entity Name component: {nameRandom?.NameValue}");
+    }
+}
+```
+
+---
+
+**Second iteration** – Significantly more performant (~10x faster)  
+*Lean, efficient, and battle-tested.*
+
+```csharp
+// Copyright (c) November 2025 Félix-Olivier Dumas. All rights reserved.
+// Licensed under the terms described in the LICENSE file
+
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Xml.Schema;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+class Entity {
+    private static int nextId;
+    private readonly int id;
+
+    public Entity() => this.id = nextId++;
+    public int getId() => id;
+}
+
+class Component {
+    public Component() { }
+
+    public void print() => Console.WriteLine(this.GetType().Name);
+}
+
+class Movement : Component {
+    public float SpeedX { get; set; }
+    public float SpeedY { get; set; }
+    public (float X, float Y) Direction { get; set; } = (0, 0);
+
+    public void SetDirection(float x, float y) {
+        var length = MathF.Sqrt(x * x + y * y);
+        Direction = length == 0 ? (0, 0) : (x / length, y / length);
+    }
+}
+
+class Name : Component {
+    public string? name { get; set; }
+}
+
+class EntityManager {
+    private readonly Dictionary<int, Memory<Component>> _reg = new Dictionary<int, Memory<Component>>();
+    private Dictionary<int, int> _count = new Dictionary<int, int>();
+
+    public EntityManager() { }
+
+    public void AddComponent<C>(int eidx) where C : Component, new() {
+        if (!_reg.TryGetValue(eidx, out var memc)) {
+            Component[] initArr = new Component[10];
+            memc = initArr;
+            _reg[eidx] = memc;
+            _count[eidx] = 0;
+        }
+
+        int len = memc.Span.Length;
+        int count = _count[eidx];
+        if (count == len) {
+            Component[] newArray = new Component[len * 2];
+            memc.Span.CopyTo(newArray);
+            memc = newArray;
+            _reg[eidx] = memc;
+        }
+
+        Span<Component> span = memc.Span;
+        span[count] = new C();
+        _count[eidx] = count + 1;
+    }
+
+    public C? getComponent<C>(int eidx) where C : Component, new() {
+        Span<Component> span = _reg[eidx].Span;
+        for (int i = 0; i < _count[eidx]; i++) {
+            ref C c = ref Unsafe.As<Component, C>(ref span[i]);
+            return c;
+        }
+        return null;
+    }
+
+    public int countComponents(int eidx) => _count[eidx];
+
+    public bool hasComponents(int eidx) => _count[eidx] > 0;
+
+    public List<string> getComponentNames(int eidx) {
+        var names = new List<string>();
+        if (_reg.TryGetValue(eidx, out var memc)) {
+            Span<Component> span = memc.Span;
+            for (int i = 0; i < span.Length; i++) {
+                ref var c = ref span[i];
+                names.Add(item: c.ToString());
+            }
+        }
+        return names;
+    }
+}
+class Position : Component {
+    public int X { get; set; }
+    public int Y { get; set; }
+}
+
+class Velocity : Component {
+    public int X { get; set; }
+    public int Y { get; set; }
+}
+
+class Program {
+    static void Main(string[] args) {
+        var entityManager = new EntityManager();
+        int entityCount = 100_000;
+        int componentsPerEntity = 3;
+
+        var entities = new List<Entity>(entityCount);
+
+        var sw = Stopwatch.StartNew();
+        for (int i = 0; i < entityCount; i++) {
+            var e = new Entity();
+            entities.Add(e);
+            entityManager.AddComponent<Name>(e.getId());
+            entityManager.AddComponent<Position>(e.getId());
+            entityManager.AddComponent<Velocity>(e.getId());
+        }
+        sw.Stop();
+        Console.WriteLine($"Setup {entityCount} entities with {componentsPerEntity} components each: {sw.ElapsedMilliseconds} ms");
+
+        sw.Restart();
+        for (int i = 0; i < entityCount; i++) {
+            var e = entities[i];
+            var name = entityManager.getComponent<Name>(e.getId());
+            if (name != null) name.name = "Test" + i;
+        }
+        sw.Stop();
+        Console.WriteLine($"Accessed and modified Name components: {sw.ElapsedMilliseconds} ms");
+
+        sw.Restart();
+        for (int i = 0; i < entityCount; i++) {
+            var e = entities[i];
+            var pos = entityManager.getComponent<Position>(e.getId());
+            var vel = entityManager.getComponent<Velocity>(e.getId());
+            if (pos != null) { pos.X = i; pos.Y = i * 2; }
+            if (vel != null) { vel.X = i; vel.Y = i * 2; }
+        }
+        sw.Stop();
+        Console.WriteLine($"Accessed and modified Position and Velocity components: {sw.ElapsedMilliseconds} ms");
+
+        sw.Restart();
+        var testEntity = entities[0];
+        var count = entityManager.countComponents(testEntity.getId());
+        sw.Stop();
+        Console.WriteLine($"CountComponents lookup for 1 entity: {sw.ElapsedTicks} ticks");
+
+        var randomEntity = entities[(entityCount / 2)];
+        var nameRandom = entityManager.getComponent<Name>(randomEntity.getId());
+        Console.WriteLine($"Random entity Name component: {nameRandom?.name}");
     }
 }
 ```
