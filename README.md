@@ -37,18 +37,6 @@
 
 ---
 
-## Benchmark
-
-```console
-Setup 100000 entities with 3 components each: 1864 ms
-Accessed and modified Name components: 16 ms
-Accessed and modified Position and Velocity components: 30 ms
-CountComponents lookup for 1 entity: 8231 ticks
-Random entity Name component:
-```
-
----
-
 ## Full Code
 
 ```csharp
