@@ -8,10 +8,10 @@
     <img src="https://img.shields.io/badge/C%23-11.0-239120?style=flat-square&logo=c-sharp&logoColor=white" alt="C#">
   </a>
   <a href="https://dotnet.microsoft.com/">
-    <img src="https://img.shields.io/badge/.NET-8.0-512BD4?style=flat-square&logo=dotnet&logoColor=white" alt=".NET">
+    <img src="https://img.shields.io/badge/.NET-9.0-512BD4?style=flat-square&logo=dotnet&logoColor=white" alt=".NET">
   </a>
   <a href="LICENSE">
-    <img src="https://img.shields.io/badge/License-Custom-orange?style=flat-square" alt="License">
+    <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License">
   </a>
 </p>
 
