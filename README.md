@@ -1,7 +1,7 @@
 <div align="center">
 
 <h1>Apex</h1>
-<h3><em>A playground for high-performance, modular C# ECS experiments</em></h3>
+<h3><em>A C# ECS framework for experimentation and performance testing</em></h3>
 
 <p>
   <a href="https://docs.microsoft.com/en-us/dotnet/csharp/">
@@ -16,29 +16,11 @@
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/License-Custom-orange?style=flat-square" alt="License">
   </a>
-  <a href="https://github.com/unrays/Quark">
-    <img src="https://img.shields.io/badge/Status-Active%20Development-success?style=flat-square" alt="Status">
-  </a>
 </p>
 
 <p>
-<em>---</em>
-</p>
-
-<p>
-Apex is not just an ECS framework—it's a **living documentation of ECS experiments and performance iterations**.  
-Here you'll find different approaches, benchmarks, and trade-offs explored through multiple iterations, aiming to design the **most performant and modular ECS possible** in C#.
-</p>
-
-<p>
-This repository showcases:  
-- Step-by-step ECS design iterations  
-- Benchmarks highlighting the advantages and drawbacks of each approach  
-- Techniques to optimize memory access, component storage, and system execution  
-</p>
-
-<p>
-Whether you're learning ECS, interested in high-performance C# patterns, or curious about trade-offs in system design, Apex gives you a **hands-on view into the process of crafting a fast, modular ECS**.
+Apex is a small ECS framework used to explore different design approaches, benchmark performance, and document trade-offs.  
+It shows step-by-step iterations, memory access patterns, and system designs to understand how each choice affects efficiency and maintainability.
 </p>
 
 <p>
