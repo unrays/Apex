@@ -736,3 +736,215 @@ class Program {
     }
 }
 ```
+
+**Fifth iteration** – Conceptually clean, uses structs, but roughly 3× slower than a class-based ECS due to dictionary and array overhead.
+*Conceptually solid, fully struct-based, but runtime is heavier due to memory indirection.*
+
+```console
+Setup 100000 entities with 3 components each: 94 ms
+Accessed and modified Name components: 18 ms
+Accessed and modified Position and Velocity components: 23 ms
+CountComponents lookup for 1 entity: 1150 ticks
+Random entity Name component: Test50000
+```
+
+```csharp
+// Copyright (c) November 2025 Félix-Olivier Dumas. All rights reserved.
+// Licensed under the terms described in the LICENSE file
+
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+public readonly struct Entity {
+    private static int nextId;
+    public readonly int id;
+
+    public Entity() => id = nextId++;
+}
+
+public interface IComponent { }
+
+public struct Position : IComponent {
+    public float x, y;
+}
+
+public struct Velocity : IComponent {
+    public float x, y;
+}
+
+public struct Name : IComponent {
+    public string name;
+}
+
+class EntityManager {
+    private readonly Dictionary<int, Memory<Type>> _entityCompTypes = new Dictionary<int, Memory<Type>>();
+    private readonly Dictionary<int, Memory<int>> _registry = new Dictionary<int, Memory<int>>();
+    private readonly Dictionary<Type, object> _dynamicStorage = new Dictionary<Type, object>();
+    private readonly Dictionary<int, int> _entityCompCount = new Dictionary<int, int>();
+    private readonly Dictionary<Type, int> _typeCount = new Dictionary<Type, int>();
+    private readonly Dictionary<int, int> _count = new Dictionary<int, int>();
+
+    public EntityManager() { }
+
+    public void Add<T>(int eidx) where T : struct {
+        Type t = typeof(T);
+        if (!_dynamicStorage.ContainsKey(t)) {
+            var arrType = t.MakeArrayType();
+            object arrayInstance = Activator.CreateInstance(arrType, 10);
+            _dynamicStorage[t] = arrayInstance;
+        }
+
+        if (!_registry.TryGetValue(eidx, out var compIds)) {
+            int[] initArr = new int[10];
+            compIds = initArr;
+            _registry[eidx] = compIds;
+            _count[eidx] = 0;
+        }
+
+        int len = compIds.Span.Length;
+        int count = _count[eidx];
+        if (count == len) {
+            int[] newArray = new int[len * 2];
+            compIds.Span.CopyTo(newArray);
+            compIds = newArray;
+            _registry[eidx] = compIds;
+        }
+
+        T[] typedArr = (T[])_dynamicStorage[t];
+        if (!_typeCount.TryGetValue(t, out var tcount)) {
+            tcount = 0;
+            _typeCount[t] = tcount;
+        }
+
+        if (tcount == typedArr.Length) {
+            T[] newArr = new T[typedArr.Length * 2];
+            Array.Copy(typedArr, newArr, typedArr.Length);
+            _dynamicStorage[t] = newArr;
+            typedArr = newArr;
+        }
+
+        if (!_entityCompTypes.TryGetValue(eidx, out var typeMem)) {
+            Type[] initArr = new Type[10];
+            typeMem = initArr;
+            _entityCompTypes[eidx] = typeMem;
+        }
+
+        if (!_entityCompCount.TryGetValue(eidx, out var typeCount)) {
+            typeCount = 0;
+            _entityCompCount[eidx] = typeCount;
+        }
+
+        Span<Type> typeSpan = typeMem.Span;
+
+        if (typeCount >= typeSpan.Length) {
+            Type[] newArr = new Type[typeSpan.Length * 2];
+            typeSpan.CopyTo(newArr);
+            _entityCompTypes[eidx] = newArr.AsMemory();
+            typeSpan = _entityCompTypes[eidx].Span;
+        }
+
+        T element = default;
+        typedArr[tcount] = element;
+
+        _typeCount[t] = tcount + 1;
+        _registry[eidx].Span[_count[eidx]] = _typeCount[t];
+
+        typeSpan[typeCount] = t;
+        _entityCompCount[eidx] = typeCount + 1;
+
+        _count[eidx] = count + 1;
+    }
+
+    public ref T Get<T>(int eidx) where T : struct {
+        if (!_entityCompTypes.TryGetValue(eidx, out var typesMem))
+            return ref Unsafe.NullRef<T>();
+
+        if (!_registry.TryGetValue(eidx, out var memIdx))
+            return ref Unsafe.NullRef<T>();
+
+        int count = _entityCompCount[eidx];
+        Type t = typeof(T);
+
+        for (int i = 0; i < count; i++) {
+            if (typesMem.Span[i] == t) {
+                int idxInDynamic = memIdx.Span[i];
+                var arr = (T[])_dynamicStorage[t];
+                return ref arr[idxInDynamic];
+            }
+        }
+        return ref Unsafe.NullRef<T>();
+    }
+
+    public int countComponents(int eidx) => _count[eidx];
+
+    public bool hasComponents(int eidx) => _count[eidx] > 0;
+
+    public List<string> getComponentNames(int eidx) {
+        var names = new List<string>();
+        if (_registry.TryGetValue(eidx, out var memc)) {
+            var span = memc.Span;
+            for (int i = 0; i < span.Length; i++) {
+                ref var c = ref span[i];
+                names.Add(item: c.ToString());
+            }
+        } return names;
+    }
+}
+
+class Program {
+    static void Main(string[] args) {
+        var entityManager = new EntityManager();
+        int entityCount = 100_000;
+        int componentsPerEntity = 3;
+
+        var entities = new List<Entity>(entityCount);
+
+        var sw = Stopwatch.StartNew();
+        for (int i = 0; i < entityCount; i++) {
+            var e = new Entity();
+            entities.Add(e);
+            entityManager.Add<Name>(e.id);
+            entityManager.Add<Position>(e.id);
+            entityManager.Add<Velocity>(e.id);
+        }
+        sw.Stop();
+        Console.WriteLine($"Setup {entityCount} entities with {componentsPerEntity} components each: {sw.ElapsedMilliseconds} ms");
+
+        sw.Restart();
+        for (int i = 0; i < entityCount; i++) {
+            var e = entities[i];
+
+            ref var name = ref entityManager.Get<Name>(e.id);
+            if (!Unsafe.IsNullRef(ref name))
+                name.name = "Test" + i;
+        }
+        sw.Stop();
+        Console.WriteLine($"Accessed and modified Name components: {sw.ElapsedMilliseconds} ms");
+
+        sw.Restart();
+        for (int i = 0; i < entityCount; i++) {
+            var e = entities[i];
+            ref var pos = ref entityManager.Get<Position>(e.id);
+            ref var vel = ref entityManager.Get<Velocity>(e.id);
+            if (!Unsafe.IsNullRef(ref pos)) { pos.x = i; pos.y = i * 2; }
+            if (!Unsafe.IsNullRef(ref vel)) { vel.x = i; vel.y = i * 2; }
+        }
+        sw.Stop();
+        Console.WriteLine($"Accessed and modified Position and Velocity components: {sw.ElapsedMilliseconds} ms");
+
+        sw.Restart();
+        var testEntity = entities[0];
+        var count = entityManager.countComponents(testEntity.id);
+        sw.Stop();
+        Console.WriteLine($"CountComponents lookup for 1 entity: {sw.ElapsedTicks} ticks");
+
+        var randomEntity = entities[(entityCount / 2)];
+        var nameRandom = entityManager.Get<Name>(randomEntity.id);
+        Console.WriteLine($"Random entity Name component: {nameRandom.name}");
+    }
+}
+```
