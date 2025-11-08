@@ -28,6 +28,10 @@ It shows step-by-step iterations, memory access patterns, and system designs to 
   <a href="#-documentation">Documentation</a>
 </p>
 
+<p style="opacity:0.5; font-size:0.8em;">
+Layout generated with ChatGPT, content and data are 100% authored by the project owner.
+</p>
+
 </div>
 
 ---
