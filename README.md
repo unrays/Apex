@@ -421,6 +421,7 @@ class Program {
 **Third iteration** – Significantly more performant (~25-35% faster than first iteration)
 *Lean, efficient, and battle-tested.*
 
+```csharp
 // Copyright (c) October 2025 Félix-Olivier Dumas. All rights reserved.
 // Licensed under the terms described in the LICENSE file
 
@@ -548,6 +549,7 @@ class Program {
         Console.WriteLine($"Random entity Name component: {nameRandom?.name}");
     }
 }
+```
 
 ---
 
