@@ -10,9 +10,6 @@
   <a href="https://dotnet.microsoft.com/">
     <img src="https://img.shields.io/badge/.NET-8.0-512BD4?style=flat-square&logo=dotnet&logoColor=white" alt=".NET">
   </a>
-  <a href="https://www.libsdl.org/">
-    <img src="https://img.shields.io/badge/SDL2-Enabled-00599C?style=flat-square&logo=steam&logoColor=white" alt="SDL2">
-  </a>
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/License-Custom-orange?style=flat-square" alt="License">
   </a>
