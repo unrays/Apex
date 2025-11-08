@@ -40,6 +40,14 @@
 **First iteration** – Super performant and simple
 *Fast, lean, and easy to understand.*
 
+```console
+Setup 100000 entities with 3 components each: 29 ms
+Accessed and modified Name components: 21 ms
+Accessed and modified Position and Velocity components: 26 ms
+CountComponents lookup for 1 entity: 1963 ticks
+Random entity Name component: Test50000
+```
+
 ```csharp
 // Copyright (c) October 2025 Félix-Olivier Dumas. All rights reserved.
 // Licensed under the terms described in the LICENSE file
