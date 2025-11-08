@@ -418,8 +418,16 @@ class Program {
 
 ---
 
-**Third iteration** – Significantly more performant (~25-35% faster than first iteration)
+**Third iteration** – Significantly more performant (~25-40% faster than first iteration)
 *Lean, efficient, and battle-tested.*
+
+```console
+Setup 100000 entities with 3 components each: 29 ms
+Accessed and modified Name components: 19 ms
+Accessed and modified Position and Velocity components: 25 ms
+CountComponents lookup for 1 entity: 1616 ticks
+Random entity Name component: Test50000
+```
 
 ```csharp
 // Copyright (c) October 2025 Félix-Olivier Dumas. All rights reserved.
