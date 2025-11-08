@@ -181,8 +181,8 @@ class Program {
 
 ---
 
-**Second iteration** – Conceptually elegant
-*Great design, but not optimized for speed.*
+**Second iteration** – Over 10x slower than first iteration  
+*Conceptually elegant, great design, but not optimized for speed.*
 
 ```csharp
 // Copyright (c) November 2025 Félix-Olivier Dumas. All rights reserved.
@@ -418,8 +418,141 @@ class Program {
 
 ---
 
-**Third iteration** – Significantly more performant (~10x faster)  
+**Third iteration** – Significantly more performant (~25-35% faster than first iteration)
 *Lean, efficient, and battle-tested.*
+
+// Copyright (c) October 2025 Félix-Olivier Dumas. All rights reserved.
+// Licensed under the terms described in the LICENSE file
+
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Xml.Schema;
+
+class Entity {
+    private static int nextId;
+    private readonly int id;
+
+    public Entity() => this.id = nextId++;
+    public int getId() => id;
+}
+
+class Component {
+    public Component() { }
+
+    public void print() => Console.WriteLine(this.GetType().Name);
+}
+
+class Movement : Component {
+    public float SpeedX { get; set; }
+    public float SpeedY { get; set; }
+    public (float X, float Y) Direction { get; set; } = (0, 0);
+
+    public void SetDirection(float x, float y) {
+        var length = MathF.Sqrt(x * x + y * y);
+        Direction = length == 0 ? (0, 0) : (x / length, y / length);
+    }
+}
+
+class Name : Component {
+    public string? name { get; set; }
+}
+
+class EntityManager {
+    private readonly Dictionary<int, List<Component>> registry = new Dictionary<int, List<Component>>();
+
+    public EntityManager() { }
+
+    public void AddComponent<C>(int e) where C : Component, new() {
+        if (!registry.TryGetValue(e, value: out var components)) {
+            components = new List<Component>(); registry[e] = components;
+        } components.Add(new C());
+    }
+
+    public C? getComponent<C>(int e) where C : Component, new() {
+        if (registry.TryGetValue(e, value: out var components)) {
+            var corresponding = components.OfType<C>().FirstOrDefault();
+            return corresponding;
+        } return default;
+    }
+
+    public int countComponents(int e) => registry[e].Count();
+
+    public bool hasComponents(int e) => registry[e].Count() is not 0;
+
+    public List<string> getComponentNames(int e) {
+        var names = new List<string>();
+        registry[e].ForEach(obj => names.Add(obj.GetType().Name));
+        return names;
+    }
+}
+class Position : Component {
+    public int X { get; set; }
+    public int Y { get; set; }
+}
+
+class Velocity : Component {
+    public int X { get; set; }
+    public int Y { get; set; }
+}
+
+class Program {
+    static void Main(string[] args) {
+        var entityManager = new EntityManager();
+        int entityCount = 100_000;
+        int componentsPerEntity = 3;
+
+        var entities = new List<Entity>(entityCount);
+
+        var sw = Stopwatch.StartNew();
+        for (int i = 0; i < entityCount; i++) {
+            var e = new Entity();
+            entities.Add(e);
+            entityManager.AddComponent<Name>(e.getId());
+            entityManager.AddComponent<Position>(e.getId());
+            entityManager.AddComponent<Velocity>(e.getId());
+        }
+        sw.Stop();
+        Console.WriteLine($"Setup {entityCount} entities with {componentsPerEntity} components each: {sw.ElapsedMilliseconds} ms");
+
+        sw.Restart();
+        for (int i = 0; i < entityCount; i++) {
+            var e = entities[i];
+            var name = entityManager.getComponent<Name>(e.getId());
+            if (name != null) name.name = "Test" + i;
+        }
+        sw.Stop();
+        Console.WriteLine($"Accessed and modified Name components: {sw.ElapsedMilliseconds} ms");
+
+        sw.Restart();
+        for (int i = 0; i < entityCount; i++) {
+            var e = entities[i];
+            var pos = entityManager.getComponent<Position>(e.getId());
+            var vel = entityManager.getComponent<Velocity>(e.getId());
+            if (pos != null) { pos.X = i; pos.Y = i * 2; }
+            if (vel != null) { vel.X = i; vel.Y = i * 2; }
+        }
+        sw.Stop();
+        Console.WriteLine($"Accessed and modified Position and Velocity components: {sw.ElapsedMilliseconds} ms");
+
+        sw.Restart();
+        var testEntity = entities[0];
+        var count = entityManager.countComponents(testEntity.getId());
+        sw.Stop();
+        Console.WriteLine($"CountComponents lookup for 1 entity: {sw.ElapsedTicks} ticks");
+
+        var randomEntity = entities[(entityCount / 2)];
+        var nameRandom = entityManager.getComponent<Name>(randomEntity.getId());
+        Console.WriteLine($"Random entity Name component: {nameRandom?.name}");
+    }
+}
+
+---
+
+**Fourth iteration** – Performance similar to first iteration (~5% faster) 
+*Complex and intricate, yet slightly more performant.*
 
 ```csharp
 // Copyright (c) November 2025 Félix-Olivier Dumas. All rights reserved.
