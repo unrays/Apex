@@ -126,6 +126,7 @@ class ComponentPool<C, T> where C : IComponent<T> where T : unmanaged, INumber<T
             _componentsByTypeId[cmp.GetType()] = set = new HashSet<T>();
         set.Add(idx);
     }
+
     private C? InternalFetch(T idx) => _components[int.CreateTruncating(idx)] ?? default;
 
     public void AddAt(T idx, C cmp) => InternalRegister(idx, cmp);
