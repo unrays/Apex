@@ -573,10 +573,10 @@ class Program {
 *Highly optimized for runtime, but setup overhead is a bit higher.*
 
 ```console
-Setup 100000 entities with 3 components each: 35 ms 
-Accessed and modified Name components: 12 ms
-Accessed and modified Position and Velocity components: 12 ms
-CountComponents lookup for 1 entity: 1293 ticks
+Setup 100000 entities with 3 components each: 30 ms
+Accessed and modified Name components: 10 ms
+Accessed and modified Position and Velocity components: 10 ms
+CountComponents lookup for 1 entity: 1137 ticks
 Random entity Name component: Test50000
 ```
 
