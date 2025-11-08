@@ -226,10 +226,6 @@ where C : IComponent<T>, new() where T : unmanaged, INumber<T> where E : IEntity
     }
 }
 
-
-/// <summary>
-/// A high-performance, modular C# ECS for lightning-fast entity management.
-/// </summary>
 class Program {
     static UInt32 entityCounter = 0;
     static void Main(string[] args) {
