@@ -418,7 +418,7 @@ class Program {
 
 ---
 
-**Third iteration** – Significantly more performant (~25-40% faster than first iteration)
+**Third iteration** – Significantly more performant (~25-35% faster than first iteration)
 *Lean, efficient, and battle-tested.*
 
 ```console
