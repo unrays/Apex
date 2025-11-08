@@ -37,7 +37,7 @@
 
 ---
 
-## Benchmarks
+## Benchmark
 
 ```console
 Setup 100000 entities with 3 components each: 1864 ms
