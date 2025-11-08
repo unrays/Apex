@@ -184,6 +184,15 @@ class Program {
 **Second iteration** – Over 10x slower than first iteration  
 *Conceptually elegant, great design, but not optimized for speed.*
 
+```console
+Setup 100000 entities with 3 components each: 1814 ms
+Accessed and modified Name components: 17 ms
+Accessed and modified Position and Velocity components: 29 ms
+CountComponents lookup for 1 entity: 4663 ticks
+Random entity Name component:
+```
+
+
 ```csharp
 // Copyright (c) November 2025 Félix-Olivier Dumas. All rights reserved.
 // Licensed under the terms described in the LICENSE file
