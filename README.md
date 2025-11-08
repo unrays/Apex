@@ -737,7 +737,7 @@ class Program {
 }
 ```
 
-**Fifth iteration** – Conceptually clean, uses structs, but roughly 3× slower than a class-based ECS due to dictionary and array overhead.
+**Fifth iteration** – Conceptually clean, uses structs, but roughly 3× slower than first iteration due to dictionary and array overhead.
 *Conceptually solid, fully struct-based, but runtime is heavier due to memory indirection.*
 
 ```console
