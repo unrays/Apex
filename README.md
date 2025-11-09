@@ -960,3 +960,4 @@ Accessed and modified Position and Velocity components: 10 ms
 CountComponents lookup for 1 entity: 1137 ticks
 Random entity Name component: Test50000
 ```
+Already ran some tests on my current iteration, yet, its not fully ready.
