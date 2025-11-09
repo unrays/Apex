@@ -1117,9 +1117,9 @@ class Program {
 
 ---
 
-**Seventh iteration** – Everything's flatter and way faster now.  
-*Ditched Memory<T> and jagged arrays for simple arrays + indices. Setup and access are way quicker, really feels snappy even with a ton of entities.*  
-*(Around 70% faster than the first iteration, ~40% faster than the sixth one)*
+**Seventh iteration** – Flatter and faster.  
+*Switched to plain arrays + indices. Setup and access are much quicker, even with lots of entities.*  
+*(~70% faster than first, ~40% faster than sixth)*
 
 ```console
 Setup 100000 entities with 3 components each: 15 ms
