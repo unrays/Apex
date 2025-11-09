@@ -737,6 +737,8 @@ class Program {
 }
 ```
 
+---
+
 **Fifth iteration** – Conceptually clean, uses structs, but roughly 3× slower setup than first iteration due to dictionary and array overhead.
 *Conceptually solid, fully struct-based, but runtime is heavier due to memory indirection.*
 
@@ -950,7 +952,10 @@ class Program {
 
 ```
 
+---
+
 **Sixth iteration** – Conceptually clean, uses raw `T[]` instead of `Memory<T>`; significantly faster setup and access, keeping struct-based type safety while cutting all wrapper overhead.
+*(~55% faster than first iteration, ~35% faster than fourth iteration)*
 
 ```console
 Setup 100000 entities with 3 components each: 20 ms
