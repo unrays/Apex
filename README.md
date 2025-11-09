@@ -1288,3 +1288,227 @@ class Program {
     }
 }
 ```
+
+---
+
+**Eighth iteration – Simply better.**
+Fully optimized with direct indices and minimal overhead. Setup and component access are blazing fast, even at massive scale.
+*(~75-90% faster than first, ~2x faster in 3rd metric than seventh)*
+
+```console
+Setup 100000 entities with 3 components each: 12 ms
+Accessed and modified Name components: 8 ms
+Accessed and modified Position and Velocity components: 2 ms
+CountComponents lookup for 1 entity: 991 ticks
+Random entity Name component: Test50000
+```
+
+```csharp
+// Copyright (c) November 2025 Félix-Olivier Dumas. All rights reserved.
+// Licensed under the terms described in the LICENSE file
+
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+public readonly struct Entity {
+    private static int nextId;
+    public readonly int id;
+
+    public Entity() => id = nextId++;
+}
+
+class Component {
+    public Component() { }
+
+    public void print() => Console.WriteLine(this.GetType().Name);
+}
+
+class Movement : Component {
+    public float SpeedX { get; set; }
+    public float SpeedY { get; set; }
+    public (float X, float Y) Direction { get; set; } = (0, 0);
+
+    public void SetDirection(float x, float y) {
+        var length = MathF.Sqrt(x * x + y * y);
+        Direction = length == 0 ? (0, 0) : (x / length, y / length);
+    }
+}
+
+class Name : Component {
+    public string name;
+}
+
+class EntityManager {
+    private const int InitialTypeFlagsCapacity = 8;
+    private const int InitialEntityCapacity = 100_000;
+    private const int InitialPoolCapacity = 300_000;
+
+    private int[][] _jreg = new int[InitialEntityCapacity][];
+    private Component[] _pool = new Component[InitialPoolCapacity];
+    private Type[] _typeFlags = new Type[InitialTypeFlagsCapacity];
+    private int[] _typeIndex = new int[InitialEntityCapacity]; // map component id vers type id
+
+    //possiblement faire genre un model qui stocke les types enrgistrés dans le system
+    //et les mapper a un index, genre comme un dictionnaire de tous les types découverts
+    //depuis le début de l'exécution et changer la pool ou alternative pour qu'il stocke
+    //aussi un lien (index) vers le type de la collection générique. Par exemple, si on a
+    //découvert 3 Position et 2 Name depuis le début, bien la collection aura
+    //{ 1: Position, 2: Name } et les components pointerons vers l'index approprié
+    //de cette collection. Petit tip, utilie typeof pour extraire le type de T
+    //lors de l'ajout et ne fait que demander/where le type correspondant au type
+    //T demandé dans le Get, afin d'avoir une recherche qui est essentiellement O(1)
+    //contrairement à O(n) avec les boucles itératives sur des collections d'items.
+
+
+    //faire un typePool pour les types
+
+    private int[] _cCount = new int[InitialEntityCapacity];  // correspond à nb element _jreg[1]
+    private int _eCount = 0; // correspond à nb element _jreg[0]
+    private int _pCount = 0; // correspond à nb element de _pool 
+    private int _tfCount = 0;
+    private int _tiCount = 0;
+
+    public EntityManager() { }
+
+    public void Add<T>(int eidx) where T : Component, new() {
+        int tfCount = _tfCount;
+        int tfLen = _typeFlags.Length;
+        while (_tiCount >= _typeIndex.Length)
+            Array.Resize(ref _typeIndex, _typeIndex.Length * 2);
+
+        Type t = typeof(T);
+        int foundIndex = -1;
+        for (int i = 0; i < tfCount; i++)
+            if (_typeFlags[i] == t)
+                foundIndex = i;
+
+        if (foundIndex == -1) {
+            _typeFlags[tfCount] = t;
+            foundIndex = tfCount;
+            tfCount++;
+            _tfCount = tfCount;
+        }
+
+        while (eidx >= _jreg.Length) {
+            Array.Resize(ref _jreg, _jreg.Length * 2);
+            Array.Resize(ref _cCount, _cCount.Length * 2);
+        }
+
+        int[] cArr = _jreg[eidx];
+        if (cArr == null)
+            _jreg[eidx] = cArr = new int[8];
+
+        if (_cCount[eidx] >= cArr.Length) {
+            Array.Resize(ref cArr, cArr.Length * 2);
+            _jreg[eidx] = cArr;
+        }
+
+        if (_pCount >= _pool.Length)
+            Array.Resize(ref _pool, _pool.Length * 2);
+
+        _typeIndex[_pCount] = foundIndex;
+        _tiCount++;
+
+        _pool[_pCount] = new T();
+        cArr[_cCount[eidx]] = _pCount;
+
+        _cCount[eidx]++;
+        _pCount++;
+    }
+
+    public T? Get<T>(int eidx) where T : Component, new() {
+        int[] cArr = _jreg[eidx];
+
+        Type t = typeof(T);
+        if (cArr != null) {
+            var span = cArr.AsSpan(0, _cCount[eidx]);
+            for (int i = 0; i < _cCount[eidx]; i++) {
+                ref int compID = ref cArr[i];
+                int typeIndex = _typeIndex[compID];
+                if (_typeFlags[typeIndex] == t)
+                    return Unsafe.As<Component, T>(ref _pool[compID]);
+            }
+        } return null;
+    }
+
+
+    public int Count(int eidx) => _cCount[eidx];
+
+    public bool HasComponents(int eidx) => _cCount[eidx] != 0;
+
+    public List<string> GetComponentNames(int eidx) {
+        var names = new List<string>();
+
+        int[] cArr = _jreg[eidx];
+        if (cArr != null) {
+            Span<int> span = cArr.AsSpan();
+            for (int i = 0; i < _cCount[eidx]; i++) {
+                names.Add(_pool[span[i]].ToString());
+            }
+        } return names;
+    }
+}
+class Position : Component {
+    public int X;
+    public int Y;
+}
+
+class Velocity : Component {
+    public int X;
+    public int Y;
+}
+
+class Program {
+    static void Main(string[] args) {
+        var entityManager = new EntityManager();
+        int entityCount = 100_000;
+        int componentsPerEntity = 3;
+
+        var entities = new List<Entity>(entityCount);
+
+        var sw = Stopwatch.StartNew();
+        for (int i = 0; i < entityCount; i++) {
+            var e = new Entity();
+            entities.Add(e);
+            entityManager.Add<Name>(e.id);
+            entityManager.Add<Position>(e.id);
+            entityManager.Add<Velocity>(e.id);
+        }
+        sw.Stop();
+        Console.WriteLine($"Setup {entityCount} entities with {componentsPerEntity} components each: {sw.ElapsedMilliseconds} ms");
+
+        sw.Restart();
+        for (int i = 0; i < entityCount; i++) {
+            var e = entities[i];
+            var name = entityManager.Get<Name>(e.id);
+            if (name != null) name.name = "Test" + i;
+        }
+        sw.Stop();
+        Console.WriteLine($"Accessed and modified Name components: {sw.ElapsedMilliseconds} ms");
+
+        sw.Restart();
+        for (int i = 0; i < entityCount; i++) {
+            var e = entities[i];
+            var pos = entityManager.Get<Position>(e.id);
+            var vel = entityManager.Get<Velocity>(e.id);
+            if (pos != null) { pos.X = i; pos.Y = i * 2; }
+            if (vel != null) { vel.X = i; vel.Y = i * 2; }
+        }
+        sw.Stop();
+        Console.WriteLine($"Accessed and modified Position and Velocity components: {sw.ElapsedMilliseconds} ms");
+
+        sw.Restart();
+        var testEntity = entities[0];
+        var count = entityManager.Count(testEntity.id);
+        sw.Stop();
+        Console.WriteLine($"CountComponents lookup for 1 entity: {sw.ElapsedTicks} ticks");
+
+        var randomEntity = entities[(entityCount / 2)];
+        var nameRandom = entityManager.Get<Name>(randomEntity.id);
+        Console.WriteLine($"Random entity Name component: {nameRandom?.name}");
+    }
+}
+```
