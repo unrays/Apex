@@ -21,7 +21,7 @@ It shows step-by-step iterations, memory access patterns, and system designs to 
 </p>
 
 <p style="max-width:600px; margin:auto; text-align:left;">
-This is my first real project focused on performance optimization. After five days of intense work, coding roughly ten hours per day, I managed to accomplish a lot and learned a tremendous amount. The framework lays the foundation for my upcoming game engine project, and the optimizations and entity management system I built will be invaluable for tackling larger and more complex systems in the future. I worked extremely hard on this, and I truly feel that it paid off.
+This is my first real project focused on performance optimization. Over five days of intense work, coding roughly ten hours per day, I developed around seven different versions using various techniques. Not all of them worked, and some proved to be far less efficient than others, but I learned a lot in the process. This framework lays the foundation for my upcoming game engine project. It allowed me to deepen my understanding of ECS, a topic I am passionate about. I don’t fully understand every single detail yet (which would be impossible at my current level), but I am confident I can explain at least 90% of the code, even though I wrote 95% of it myself. I worked extremely hard on this, and I truly feel that it paid off.
 </p>
 
 <p>
