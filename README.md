@@ -748,7 +748,7 @@ class Program {
 ---
 
 <h2 id="iteration-5">Fifth iteration – Conceptually clean, uses structs, but roughly 3× slower setup than first iteration due to dictionary and array overhead</h2>
-<p><em>Conceptually solid, fully struct-based, but runtime is heavier due to memory indirection. (That'S what ChatGPT told me)</em></p>
+<p><em>Conceptually solid, fully struct-based, but runtime is heavier due to memory indirection. (That's what ChatGPT told me)</em></p>
 
 ```console
 Setup 100000 entities with 3 components each: 94 ms
