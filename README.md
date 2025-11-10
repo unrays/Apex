@@ -188,8 +188,8 @@ class Program {
 
 ---
 
-**Second iteration** – Over 10x slower than first iteration  
-*Conceptually elegant, great design, but not optimized for speed.*
+<h2 id="iteration-2">Second iteration – Over 10x slower than first iteration</h2>
+<p><em>Conceptually elegant, great design, but not optimized for speed.</em></p>
 
 ```console
 Setup 100000 entities with 3 components each: 1814 ms
@@ -434,8 +434,8 @@ class Program {
 
 ---
 
-**Third iteration** – Significantly more performant (~10-15% faster than first iteration)
-*Lean, efficient, and battle-tested.*
+<h2 id="iteration-3">Third iteration – Significantly more performant (~10-15% faster than first iteration)</h2>
+<p><em>Lean, efficient, and battle-tested.</em></p>
 
 ```console
 Setup 100000 entities with 3 components each: 29 ms
@@ -577,8 +577,8 @@ class Program {
 
 ---
 
-**Fourth iteration** – Performance similar to first iteration (~30% faster than first iteration, ~20% faster than second iteration) 
-*Highly optimized for runtime, but setup overhead is a bit higher.*
+<h2 id="iteration-4">Fourth iteration – Performance similar to first iteration (~30% faster than first iteration, ~20% faster than second iteration)</h2>
+<p><em>Highly optimized for runtime, but setup overhead is a bit higher.</em></p>
 
 ```console
 Setup 100000 entities with 3 components each: 35 ms
@@ -747,8 +747,8 @@ class Program {
 
 ---
 
-**Fifth iteration** – Conceptually clean, uses structs, but roughly 3× slower setup than first iteration due to dictionary and array overhead.
-*Conceptually solid, fully struct-based, but runtime is heavier due to memory indirection.*
+<h2 id="iteration-5">Fifth iteration – Conceptually clean, uses structs, but roughly 3× slower setup than first iteration due to dictionary and array overhead</h2>
+<p><em>Conceptually solid, fully struct-based, but runtime is heavier due to memory indirection.</em></p>
 
 ```console
 Setup 100000 entities with 3 components each: 94 ms
@@ -962,8 +962,8 @@ class Program {
 
 ---
 
-**Sixth iteration** – Conceptually clean, uses raw `T[]` instead of `Memory<T>`; significantly faster setup and access, keeping struct-based type safety while cutting all wrapper overhead.
-*(~55% faster than first iteration, ~35% faster than fourth iteration)*
+<h2 id="iteration-6">Sixth iteration – Conceptually clean, uses raw <code>T[]</code> instead of <code>Memory&lt;T&gt;</code>; significantly faster setup and access, keeping struct-based type safety while cutting all wrapper overhead.</h2>
+<p><em>(~55% faster than first iteration, ~35% faster than fourth iteration)</em></p>
 
 ```console
 Setup 100000 entities with 3 components each: 20 ms
@@ -1125,9 +1125,9 @@ class Program {
 
 ---
 
-**Seventh iteration** – Flatter and faster.  
-*Switched to plain arrays + indices. Setup and access are much quicker, even with lots of entities.*  
-*(~70% faster than first, ~40% faster than sixth)*
+<h2 id="iteration-7">Seventh iteration – Flatter and faster.</h2>
+<p><em>Switched to plain arrays + indices. Setup and access are much quicker, even with lots of entities.</em></p>
+<p><em>(~70% faster than first, ~40% faster than sixth)</em></p>
 
 ```console
 Setup 100000 entities with 3 components each: 15 ms
@@ -1299,9 +1299,9 @@ class Program {
 
 ---
 
-**Eighth iteration – Simply better.**
-Fully optimized with direct indices and minimal overhead. Setup and component access are blazing fast, even at massive scale.
-*(~75-90% faster than first, ~2x faster in 3rd metric than seventh)*
+<h2 id="iteration-8">Eighth iteration – Simply better :)</h2>
+<p>Fully optimized with direct indices and minimal overhead. Setup and component access are blazing fast, even at massive scale.</p>
+<p><em>(~75-90% faster than first, ~2x faster in 3rd metric than seventh)</em></p>
 
 ```console
 Setup 100000 entities with 3 components each: 12 ms
@@ -1523,9 +1523,9 @@ class Program {
 
 ---
 
-**Ninth iteration – Probably the last one.**
-Optimized release configuration with several JIT and compiler-level tweaks. Performance pushed even further with tighter inlining and instruction scheduling.
-*(Just take a look at the first one, no need to tell you how much performant this one is over the first iteration)*
+<h2 id="iteration-9">Ninth iteration – Probably the last one.</h2>
+<p>Optimized release configuration with several JIT and compiler-level tweaks. Performance pushed even further with tighter inlining and instruction scheduling.</p>
+<p><em>(Just take a look at the first one, no need to tell you how much more performant this one is over the first iteration)</em></p>
 
 ```console
 Setup 100000 entities with 3 components each: 15 ms
