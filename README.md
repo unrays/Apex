@@ -21,15 +21,19 @@ It shows step-by-step iterations, memory access patterns, and system designs to 
 </p>
 
 <p style="max-width:600px; margin:auto; text-align:left;">
-This is my first real project focused on performance optimization. Over five days of intense work, coding roughly ten hours per day, I developed around seven different versions using various techniques. Not all of them worked, and some proved to be far less efficient than others, but I learned a lot in the process. This framework lays the foundation for my upcoming game engine project. It allowed me to deepen my understanding of ECS, a topic I am passionate about. I don’t fully understand every single detail yet (which would be impossible at my current level), but I am confident I can explain at least 90% of the code, even though I wrote 95% of it myself. I worked extremely hard on this, and I truly feel that it paid off.
+This is my first real project focused on performance optimization. Over five days of intense work, coding roughly ten hours per day, I developed around nine different versions using various techniques. Not all of them worked, and some proved to be far less efficient than others, but I learned a lot in the process. This framework lays the foundation for my upcoming game engine project. It allowed me to deepen my understanding of ECS, a topic I am passionate about. I don’t fully understand every single detail yet (which would be impossible at my current level), but I am confident I can explain at least 90% of the code, even though I wrote 95% of it myself. I worked extremely hard on this, and I truly feel that it paid off.
 </p>
 
 <p>
-  <a href="#-features">Features</a> • 
-  <a href="#-getting-started">Getting Started</a> • 
-  <a href="#-architecture">Architecture</a> • 
-  <a href="#-showcase">Showcase</a> • 
-  <a href="#-documentation">Documentation</a>
+  <a href="#iteration-1">Iteration 1</a> •
+  <a href="#iteration-2">Iteration 2</a> •
+  <a href="#iteration-3">Iteration 3</a> •
+  <a href="#iteration-4">Iteration 4</a> •
+  <a href="#iteration-5">Iteration 5</a> •
+  <a href="#iteration-6">Iteration 6</a> •
+  <a href="#iteration-7">Iteration 7</a> •
+  <a href="#iteration-8">Iteration 8</a> •
+  <a href="#iteration-9">Iteration 9</a>
 </p>
 
 <p style="color:gray; font-size:0.75em; opacity:0.6; text-align:center;">
