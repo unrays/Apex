@@ -20,6 +20,11 @@ Apex is a small ECS framework used to explore different design approaches, bench
 It shows step-by-step iterations, memory access patterns, and system designs to understand how each choice affects efficiency and maintainability.
 </p>
 
+<p style="max-width:600px; margin:auto; text-align:left;">
+After five days of intense work, coding roughly ten hours per day, this is the result.  
+This framework is the foundation for my upcoming game engine project. The optimizations and entity management system I built here will be directly useful for developing larger, more complex systems in the future.
+</p>
+
 <p>
   <a href="#-features">Features</a> • 
   <a href="#-getting-started">Getting Started</a> • 
@@ -1520,7 +1525,7 @@ Optimized release configuration with several JIT and compiler-level tweaks. Perf
 *(Just take a look at the first one, no need to tell you how much performant this one is over the first iteration)*
 
 ```console
-Setup 100000 entities with 3 components each: 16 ms
+Setup 100000 entities with 3 components each: 15 ms
 Accessed and modified Name components: 2 ms
 Accessed and modified Position and Velocity components: 0 ms (insane)
 CountComponents lookup for 1 entity: 901 ticks
