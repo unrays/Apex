@@ -33,7 +33,8 @@ This is my first real project focused on performance optimization. Over five day
   <a href="#iteration-6">Iteration 6</a> •
   <a href="#iteration-7">Iteration 7</a> •
   <a href="#iteration-8">Iteration 8</a> •
-  <a href="#iteration-9">Iteration 9</a>
+  <a href="#iteration-9">Iteration 9</a> •
+  <a href="#iteration-10">Iteration 10</a> 
 </p>
 
 <p style="color:gray; font-size:0.75em; opacity:0.6; text-align:center;">
