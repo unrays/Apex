@@ -1773,9 +1773,6 @@ public enum ComponentMask : int { // autant de memoire qu'un int, perf++ (4 bit)
     Position = 1 << 0,
     Velocity = 1 << 1,
     Name = 1 << 2
-
-        // possiblement faire un set qui contient les valeurs les plus probables
-        // genre statistiquement, je peux lui ajouter ca et ca m'évitera d'autres ajouts
 }
 
 public static class ComponentMaskMapper {
