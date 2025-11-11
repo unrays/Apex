@@ -1805,15 +1805,14 @@ class Component {
     public Component() { }
 }
 
-class Movement : Component {
-    public float SpeedX { get; set; }
-    public float SpeedY { get; set; }
-    public (float X, float Y) Direction { get; set; } = (0, 0);
+class Position : Component {
+    public int X;
+    public int Y;
+}
 
-    public void SetDirection(float x, float y) {
-        var length = MathF.Sqrt(x * x + y * y);
-        Direction = length == 0 ? (0, 0) : (x / length, y / length);
-    }
+class Velocity : Component {
+    public int X;
+    public int Y;
 }
 
 class Name : Component {
@@ -1925,16 +1924,6 @@ class EntityManager {
             }
         } return names;
     }
-}
-
-class Position : Component {
-    public int X;
-    public int Y;
-}
-
-class Velocity : Component {
-    public int X;
-    public int Y;
 }
 
 class Program {
