@@ -1745,7 +1745,7 @@ class Program {
 
 ---
 
-<h2 id="iteration-10">Tenth iteration — I swear, this is the last one.</h2> <p>Mask-based mapping, cache-first access; setup slightly heavier, runtime lightning-fast.</p> <p><em>(Short and efficient, nothing more.)</em></p>
+<h2 id="iteration-10">Tenth iteration — I swear, this is the last one.</h2> <p>Mask-based mapping, 100% cache friendly, runtime lightning-fast.</p> <p><em>(Short and efficient, nothing more)</em></p>
 
 ```console
 Setup 100000 entities with 3 components each: 14 ms
