@@ -1739,10 +1739,10 @@ class Program {
 <h2 id="iteration-10">Tenth iteration — I swear, this is the last one.</h2> <p>Mask-based mapping, cache-first access; setup slightly heavier, runtime lightning-fast.</p> <p><em>(Short and efficient, nothing more.)</em></p>
 
 ```console
-Setup 100000 entities with 3 components each: 15 ms
+Setup 100000 entities with 3 components each: 14 ms
 Accessed and modified Name components: 2 ms
 Accessed and modified Position and Velocity components: 0 ms
-CountComponents lookup for 1 entity: 865 ticks
+CountComponents lookup for 1 entity: 840 ticks
 Random entity Name component: Test50000
 ```
 
