@@ -313,7 +313,7 @@ class ComponentPool<C, T> where C : IComponent<T> where T : unmanaged, INumber<T
 }
 
 //class EntityManager : EntityManager<Entity, Component, UInt32> { }
-class EntityManager32<E, C> : EntityManager<E, C, UInt32>
+class EntityManager32<E, C> : EntityManager<E, C, UInt32> // lol
 where C : IComponent<UInt32>, new()
 where E : IEntity<UInt32> { }
 class EntityManager<E, C, T>
