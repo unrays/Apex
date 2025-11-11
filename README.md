@@ -1850,6 +1850,7 @@ class EntityManager {
     private int _eCount = 0;
     private int _pCount = 0;
 
+
     [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.AggressiveInlining)]
     public void Add<T>(int eidx) where T : Component, new() {
         int pCount = _pCount;
