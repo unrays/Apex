@@ -1799,7 +1799,7 @@ public static class ComponentMaskMapper {
 //ulong mask1; // types 64-127
 //ulong mask2; // types 128-191
 
-// STOCKER PLUSIEURS TYPES PAR ENTITÉ, CRISS, C'EST CA QU'IL FAUT FAIRE
+// NOTE: STOCKER PLUSIEURS TYPES PAR ENTITÉ, JE VIENS DE CATCHER, C'EST CA QU'IL FAUT FAIRE
 
 class Component {
     public Component() { }
