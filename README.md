@@ -1536,6 +1536,14 @@ CountComponents lookup for 1 entity: 901 ticks
 Random entity Name component: Test50000
 ```
 
+```console
+Setup 10000000 entities with 3 components each: 2121 ms
+Accessed and modified Name components: 1088 ms
+Accessed and modified Position and Velocity components: 81 ms
+CountComponents lookup for 1 entity: 2 ticks
+Random entity Name component: Test5000000
+```
+
 ```csharp
 // Copyright (c) November 2025 Félix-Olivier Dumas. All rights reserved.
 // Licensed under the terms described in the LICENSE file
@@ -1745,6 +1753,14 @@ Accessed and modified Name components: 2 ms
 Accessed and modified Position and Velocity components: 0 ms
 CountComponents lookup for 1 entity: 840 ticks
 Random entity Name component: Test50000
+```
+
+```console
+Setup 10000000 entities with 3 components each: 768 ms
+Accessed and modified Name components: 550 ms
+Accessed and modified Position and Velocity components: 140 ms
+CountComponents lookup for 1 entity: 1154 ticks
+Random entity Name component: Test5000000
 ```
 
 ```csharp
