@@ -2155,7 +2155,6 @@ class Registry {
         while (_ctCount >= _ctype.Length)
             Array.Resize(ref _ctype, _ctype.Length * 2);
 
-
         switch (mapped) {
             case ComponentMask.Position:
                 if (eidx >= _entityToPosIndex.Length)
