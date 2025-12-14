@@ -1,34 +1,34 @@
-# LEARN Summary
+# LEARN.md
 
-1. **Iteration 1 – Simple ECS**  
-Basic, straightforward ECS with Dictionary<Entity, List<Component>>, easy to read and fast enough.  [oai_citation:1‡GitHub](https://github.com/unrays/Apex/blob/main/LEARN.md?plain=1)
+## Iteration 1  
+Very simple ECS using a Dictionary to associate entities with their components. Easy to write and reason about.
 
-2. **Iteration 2 – Elegant but Slow**  
-A more generic/abstract API that feels cleaner, but is much slower in practice.  [oai_citation:2‡GitHub](https://github.com/unrays/Apex/blob/main/LEARN.md?plain=1)
+## Iteration 2  
+More elegant and generic design, but the added abstractions make it much slower in practice.
 
-3. **Iteration 3 – Performance Boost**  
-Tweaks from iteration 1 to make things significantly faster with leaner component handling.  [oai_citation:3‡GitHub](https://github.com/unrays/Apex/blob/main/LEARN.md?plain=1)
+## Iteration 3  
+Same general approach as iteration 1, but with small structural changes that significantly improve performance.
 
-4. **Iteration 4 – Optimized Storage**  
-Reworks how components are stored to reduce overhead and improve access patterns.
+## Iteration 4  
+Component storage is reworked to reduce overhead and simplify access patterns.
 
-5. **Iteration 5 – Better Lookup**  
-Refines entity/component lookup logic to cut down on expensive searches.
+## Iteration 5  
+Improves how entities and components are looked up, reducing unnecessary work.
 
-6. **Iteration 6 – Lean Manager**  
-Further simplification of manager logic with a focus on direct component access efficiency.
+## Iteration 6  
+Further simplification of the core logic with a focus on faster component access.
 
-7. **Iteration 7 – Packed Data**  
-Makes memory layout denser to reduce cache misses and iteration overhead.
+## Iteration 7  
+Data is packed more tightly in memory to improve iteration speed.
 
-8. **Iteration 8 – Direct Collections**  
-Switches to direct arrays/collections for component storage to reduce indirection.
+## Iteration 8  
+Moves toward more direct collections (arrays/lists) to reduce indirection.
 
-9. **Iteration 9 – Fast Queries**  
-Improves iteration speed by tightening how entities are filtered and accessed.
+## Iteration 9  
+Iteration logic is tightened to avoid touching irrelevant entities.
 
-10. **Iteration 10 – Batch Processing**  
-Processes large batches of component data in tight loops for throughput gains.
+## Iteration 10  
+Focuses on processing large amounts of data in tight loops for better throughput.
 
-11. **Iteration 11 – Final Tuning**  
-Combines the best ideas and micro-optimizations for lowest overall cost and fastest access.
+## Iteration 11  
+Final pass combining previous optimizations and small tweaks for maximum performance.
