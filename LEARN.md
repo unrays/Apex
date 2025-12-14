@@ -1,34 +1,34 @@
-# LEARN.md
+# LEARN Summary
 
-## Iteration 1 – Basic ECS  
-A very simple ECS implementation focused on clarity and learning, with no real performance optimizations.
+1. **Iteration 1 – Simple ECS**  
+Basic, straightforward ECS with Dictionary<Entity, List<Component>>, easy to read and fast enough.  [oai_citation:1‡GitHub](https://github.com/unrays/Apex/blob/main/LEARN.md?plain=1)
 
-## Iteration 2 – Abstract / Generic  
-More generic and conceptually cleaner, but the added abstraction makes it significantly slower.
+2. **Iteration 2 – Elegant but Slow**  
+A more generic/abstract API that feels cleaner, but is much slower in practice.  [oai_citation:2‡GitHub](https://github.com/unrays/Apex/blob/main/LEARN.md?plain=1)
 
-## Iteration 3 – Component Pools  
-Introduces component pooling to reduce allocations and improve reuse.
+3. **Iteration 3 – Performance Boost**  
+Tweaks from iteration 1 to make things significantly faster with leaner component handling.  [oai_citation:3‡GitHub](https://github.com/unrays/Apex/blob/main/LEARN.md?plain=1)
 
-## Iteration 4 – Type-Based Storage  
-Components are stored per type, improving memory locality and iteration patterns.
+4. **Iteration 4 – Optimized Storage**  
+Reworks how components are stored to reduce overhead and improve access patterns.
 
-## Iteration 5 – Dense Entity Storage  
-Entities are stored densely in arrays, reducing indirection and cache misses.
+5. **Iteration 5 – Better Lookup**  
+Refines entity/component lookup logic to cut down on expensive searches.
 
-## Iteration 6 – Archetypes  
-Entities are grouped by component sets (archetypes) to speed up filtering and iteration.
+6. **Iteration 6 – Lean Manager**  
+Further simplification of manager logic with a focus on direct component access efficiency.
 
-## Iteration 7 – Chunked SoA  
-Uses chunked Structure-of-Arrays layout to further optimize cache efficiency.
+7. **Iteration 7 – Packed Data**  
+Makes memory layout denser to reduce cache misses and iteration overhead.
 
-## Iteration 8 – Direct Access  
-Removes most lookups by relying on direct indices for faster component access.
+8. **Iteration 8 – Direct Collections**  
+Switches to direct arrays/collections for component storage to reduce indirection.
 
-## Iteration 9 – Views / Filters  
-Adds views to iterate only over entities matching a system’s required components.
+9. **Iteration 9 – Fast Queries**  
+Improves iteration speed by tightening how entities are filtered and accessed.
 
-## Iteration 10 – Job-Style Processing  
-Processes components in batches, inspired by job systems and data-oriented design.
+10. **Iteration 10 – Batch Processing**  
+Processes large batches of component data in tight loops for throughput gains.
 
-## Iteration 11 – Cache-Oriented Final  
-Most optimized version, focusing on contiguous memory, cache usage, and overall performance.
+11. **Iteration 11 – Final Tuning**  
+Combines the best ideas and micro-optimizations for lowest overall cost and fastest access.
